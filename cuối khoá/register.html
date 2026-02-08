@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Đăng ký | Bất động sản</title>
+
+<style>
+.hide  {
+  display: none;
+  color: rgb(255, 0, 0);
+  font-size: 10px;
+  text-align: left;  
+
+}
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Language selector */
+.language {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+}
+
+.language button {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.language-list {
+  display: none;
+  position: absolute;
+  right: 0;
+  margin-top: 8px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  overflow: hidden;
+  min-width: 140px;
+}
+
+.language-list a {
+  display: block;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #374151;
+  text-decoration: none;
+}
+
+.language-list a:hover {
+  background: #f1f5f9;
+}
+
+.language:hover .language-list {
+  display: block;
+}
+
+/* Card */
+.card {
+  width: 380px;
+  background: #fff;
+  padding: 40px 32px;
+  border-radius: 14px;
+  box-shadow: 0 18px 45px rgba(0,0,0,.12);
+}
+
+.card h1 {
+  text-align: center;
+  margin-bottom: 8px;
+  color: #1f2937;
+}
+
+.card p {
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 30px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #374151;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1e40af;
+}
+
+.footer {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.footer a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Language selector -->
+<div class="language">
+  <button>🌍</button>
+  <div class="language-list">
+    <a href="#">Tiếng Việt</a>
+    <a href="#">English</a>
+    <a href="#">中文</a>
+    <a href="#">日本語</a>
+  </div>
+</div>
+
+<div class="card">
+  <h1>Đăng ký</h1>
+  <p>Tạo tài khoản bất động sản mới</p>
+
+  <form class="form">
+    <div class="form-group">
+      <label>tên người dùng</label>
+      <input type="text" id = "username" placeholder="username" >
+      <p class="hide" id="1">vui lòng nhập tên người dùng</p>
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Email" >
+      <p class="hide" id="2">vui lòng đầy đủ Email</p>
+    </div>
+
+    <div class="form-group">
+      <label>Mật khẩu</label>
+      <input type="password" id="password" placeholder="password" >
+      <p class="hide" id="3">mật khẩu bắt buộc ít nhất 6 ký tự và tối đa 30 kí tự</p>
+    </div>
+
+    <div class="form-group">
+      <label>Xác nhận mật khẩu</label>
+      <input type="password"id = "password2" placeholder="Nhập lại password" >
+      <p class="hide" id="4">mật khẩu và mật khẩu xác nhận không trùng khớp</p>
+    </div>
+
+    <button>Đăng ký</button>
+  </form>
+
+  <div class="footer">
+    Đã có tài khoản?
+    <a href="login.html">Đăng nhập</a>
+  </div>
+</div>
+
+</body>
+</html>
+
+<script>
+
+  const registerform = document.querySelector(".form")
+  registerform.addEventListener("submit",function (e) {
+    e.preventDefault();
+
+    const username = document.getElementById("username").value.trim()
+    const email = document.getElementById("email").value.trim()
+    const password = document.getElementById("password").value;
+    const password_again = document.getElementById("password2").value;
+    const name = document.getElementById("1")
+    const mail = document.getElementById("2")
+    const pass = document.getElementById("3")
+    const verifypass= document.getElementById("4")
+
+    if (!username)  {
+      name.style.display = "flex"
+      name.style.color = "red"
+      return
+    }else {
+      name.style.display = "none"
+    }
+    if (!email)  {
+      mail.innerText = "vui lòng nhập đầu đủ email"
+      mail.style.display = "flex"
+      mail.style.color = "red"
+      return
+    }else {
+      mail.style.display = "none"
+    }
+    if ((password.length <6) || (password.length>30))  {
+      pass.style.display = "flex"
+      pass.style.color = "red"
+      return
+    }else {
+      pass.style.display = "none"
+      
+    }
+    if (password !== password_again) {
+      verifypass.style.display = "flex"
+      verifypass.style.color = "red"
+      return;
+    }else {
+      verifypass.style.display = "none"
+    }
+    // Lấy danh sách user đã đăng ký
+    const checkusers = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Kiểm tra email tồn tại
+    const exists = checkusers.some((u) => u.email === email);
+    if (exists) {
+      mail.innerText = "email đã tồn tại, xin vui lòng thay đổi email"
+      mail.style.color = "red"
+      mail.style.display = "flex"
+      return;
+    }else{
+      mail.style.display = "none"
+    }
+    const user ={
+      username : username,
+      email : email,
+      password : password
+
+    }
+      // Lưu vào localStorage
+  checkusers.push(user)
+  localStorage.setItem("users", JSON.stringify(checkusers))
+
+  alert("Đăng ký thành công 🎉")
+  location.replace("login.html")
+   }
+    
+   )
+</script>
