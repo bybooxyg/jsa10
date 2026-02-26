@@ -1,11 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+<meta charset="UTF-8">
+<title>Thanh toán</title>
+
+<style>
+:root {
+  --primary: #0f2a44;
+  --accent: #2563eb;
+  --bg: #f4f6fa;
+  --text: #374151;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+}
+
+.payment-container {
+  max-width: 600px;
+  margin: 80px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.06);
+}
+
+h2 {
+  margin-top: 0;
+  color: var(--primary);
+}
+
+.price {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 20px 0;
+}
+
+.pay-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.pay-btn:hover {
+  background: #1d4ed8;
+}
+</style>
 </head>
+
 <body>
-  
+
+<div class="payment-container" id="paymentContainer"></div>
+
+<script>
+const postId = localStorage.getItem("paymentPostId");
+let posts = JSON.parse(localStorage.getItem("sellPosts")) || [];
+const post = posts.find(p => p.id == postId);
+const container = document.getElementById("paymentContainer");
+
+if (!post) {
+  container.innerHTML = "<h2>Không tìm thấy bất động sản.</h2>";
+} else {
+
+  container.innerHTML = `
+    <h2>Thanh toán bất động sản</h2>
+
+    <p><strong>${post.title}</strong></p>
+    <div class="price">${post.price || "Liên hệ"}</div>
+
+    <button class="pay-btn" onclick="confirmPayment()">Xác nhận thanh toán</button>
+  `;
+}
+
+function confirmPayment() {
+
+  if (!confirm("Bạn xác nhận thanh toán?")) return;
+
+  const index = posts.findIndex(p => p.id == postId);
+
+  if (index !== -1) {
+    posts[index].status = "sold";
+    posts[index].buyer = "Đã thanh toán";
+
+    localStorage.setItem("sellPosts", JSON.stringify(posts));
+
+    alert("Thanh toán thành công!");
+
+    localStorage.removeItem("paymentPostId");
+
+    window.location.href = "detail.html";
+  }
+}
+</script>
+
 </body>
 </html>

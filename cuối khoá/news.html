@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Chi tiết tin tức</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f6fa;
+  margin: 0;
+  padding: 40px;
+}
+
+.news-detail {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.news-detail h1 {
+  margin-bottom: 20px;
+}
+
+/* Ảnh thumbnail phía trên (nếu có) */
+#newsImage {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* Ảnh bên trong nội dung */
+#newsContent img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 15px auto;
+  border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="navbar"></div>
+
+<div class="news-detail">
+  <h1 id="newsTitle"></h1>
+  <img id="newsImage" style="display:none;">
+  <div id="newsContent"></div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  // Load navbar
+  fetch("navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+
+      const script = document.createElement("script");
+      script.src = "navbar.js";
+      document.body.appendChild(script);
+    });
+
+  const params = new URLSearchParams(window.location.search);
+  const id = Number(params.get("id"));
+
+  const newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+  const news = newsList.find(n => n.id === id);
+
+  if (!news) {
+    document.querySelector(".news-detail").innerHTML =
+      "<h2>Không tìm thấy bài viết</h2>";
+    return;
+  }
+
+  document.getElementById("newsTitle").textContent = news.title;
+
+  const contentEl = document.getElementById("newsContent");
+  contentEl.innerHTML = news.content;
+
+  // 🔥 Tự động chỉnh lại tất cả ảnh trong bài (phòng trường hợp ảnh có width lớn)
+  const images = contentEl.querySelectorAll("img");
+  images.forEach(img => {
+    img.style.maxWidth = "100%";
+    img.style.height = "auto";
+    img.style.display = "block";
+    img.style.margin = "15px auto";
+  });
+
+});
+</script>
+
+</body>
+</html>

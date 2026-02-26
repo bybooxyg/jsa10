@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chi tiết tin tức</title>
+</head>
+<body>
+
+<div id="detail"></div>
+
+<script>
+  const news = JSON.parse(localStorage.getItem("currentNews"));
+
+  if (news) {
+    document.getElementById("detail").innerHTML = `
+      <h1>${news.title}</h1>
+      <p><b>Danh mục:</b> ${news.category}</p>
+      <p>${news.createdAt}</p>
+      <img src="${news.thumbnail}" style="width:100%;max-height:400px;object-fit:cover;">
+      <hr>
+      <div>${news.content}</div>
+    `;
+  }
+</script>
+
+</body>
+</html>

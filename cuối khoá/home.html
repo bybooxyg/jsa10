@@ -22,7 +22,7 @@ body {
   background: var(--bg);
 }
 
-/* ===== NAVBAR ===== */
+/* ===== NAVBAR STYLE (dùng cho navbar.html) ===== */
 .navbar {
   background: #fff;
   border-bottom: 1px solid #e5e7eb;
@@ -42,6 +42,12 @@ body {
   font-weight: 700;
   color: var(--primary);
   text-decoration: none;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 22px;
 }
 
 .nav-menu {
@@ -68,10 +74,52 @@ body {
   color: #fff !important;
 }
 
+/* ===== USER BOX ===== */
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.user-box:hover {
+  background: #f3f4f6;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #60a5fa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.user-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
 /* ===== HERO ===== */
 .hero {
   max-width: 1200px;
-  margin: 60px auto;
+  margin: 60px auto 30px;
   padding: 0 20px;
   text-align: center;
 }
@@ -83,7 +131,7 @@ body {
 
 .hero p {
   color: #6b7280;
-  margin: 14px 0 28px;
+  margin: 14px 0 26px;
 }
 
 .search-box {
@@ -93,11 +141,10 @@ body {
 }
 
 .search-box input {
-  width: 340px;
+  width: 360px;
   padding: 14px;
   border-radius: 10px;
   border: 1px solid #e5e7eb;
-  font-size: 14px;
 }
 
 .search-box button {
@@ -109,27 +156,49 @@ body {
   cursor: pointer;
 }
 
-.search-box button:hover {
-  background: #1d4ed8;
+/* ===== NEWS ===== */
+.news {
+  max-width: 1200px;
+  margin: 40px auto 70px;
+  padding: 0 20px;
 }
 
-/* Mobile */
+.news h2 {
+  font-size: 22px;
+  color: var(--primary);
+  margin-bottom: 24px;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.news-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.06);
+  transition: .2s;
+  cursor: pointer;
+}
+
+.news-card:hover {
+  transform: translateY(-4px);
+}
+
+.news-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
 @media (max-width: 768px) {
   .nav-menu {
-    flex-wrap: wrap;
-    gap: 14px;
-  }
-
-  .search-box {
-    flex-direction: column;
-  }
-
-  .search-box input {
-    width: 100%;
-  }
-
-  .hero h1 {
-    font-size: 26px;
+    display: none;
   }
 }
 </style>
@@ -137,32 +206,94 @@ body {
 
 <body>
 
-<!-- NAVBAR -->
-<header class="navbar">
-  <div class="nav-container">
-    <a class="logo" href="#">RealEstate</a>
+<!-- ===== NAVBAR LOAD TỪ FILE RIÊNG ===== -->
+<div id="navbar-container"></div>
 
-    <nav class="nav-menu">
-      <a href="#">Mua bán</a>
-      <a href="#">Thuê</a>
-      <a href="#">Dự án</a>
-      <a href="#">Hướng dẫn đầu tư</a>
-      <a href="#">Thuê chuyên gia</a>
-      <a class="post-btn" href="#">Đăng bài</a>
-    </nav>
-  </div>
-</header>
+<script>
+fetch("navbar.html")
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById("navbar-container").innerHTML = data;
+    initUser(); // chạy sau khi navbar load xong
+  });
 
-<!-- HERO -->
+function initUser() {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  if (!currentUser) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const userName = document.getElementById("userName");
+  const avatarBox = document.getElementById("userAvatar");
+  const userBox = document.getElementById("userBox");
+
+  if (!userName || !avatarBox || !userBox) return;
+
+  userName.innerText = currentUser.username;
+
+  if (currentUser.avatar && currentUser.avatar.trim() !== "") {
+    avatarBox.innerHTML = `<img src="${currentUser.avatar}">`;
+  } else {
+    avatarBox.innerText = currentUser.username.charAt(0).toUpperCase();
+  }
+
+  userBox.addEventListener("click", () => {
+    window.location.href = "profile.html";
+  });
+}
+</script>
+
 <section class="hero">
   <h1>Nền tảng bất động sản uy tín</h1>
   <p>Mua bán • Cho thuê • Dự án • Đầu tư</p>
 
   <div class="search-box">
-    <input type="text" placeholder="Nhập khu vực, dự án, từ khóa...">
+    <input type="text" placeholder="Tìm kiếm bài viết, dự án, khu vực...">
     <button>Tìm kiếm</button>
   </div>
 </section>
 
+<section class="news">
+  <h2>Tin tức bất động sản</h2>
+  <div class="news-grid" id="newsGrid"></div>
+</section>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const newsGrid = document.getElementById("newsGrid");
+  if (!newsGrid) return;
+
+  let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+
+  if (newsList.length === 0) {
+    newsGrid.innerHTML = "<p>Chưa có bài viết nào.</p>";
+    return;
+  }
+
+  newsList.sort((a, b) => b.id - a.id);
+
+  newsList.forEach(news => {
+
+    const card = document.createElement("div");
+    card.className = "news-card";
+
+    card.innerHTML = `
+      ${news.thumbnail ? `<img src="${news.thumbnail}" alt="thumbnail">` : ""}
+      <h3>${news.title}</h3>
+      <p>${news.category || ""}</p>
+    `;
+
+    card.addEventListener("click", () => {
+      window.location.href = "news.html?id=" + news.id;
+    });
+
+    newsGrid.appendChild(card);
+  });
+
+});
+</script>
+
 </body>
-</html>
+</html> 

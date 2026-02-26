@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng bài tin tức</title>
+
+  <!-- TinyMCE CDN -->
+  <script src="https://cdn.tiny.cloud/1/mmoz8hxafxvd2ndd0r499a51ycfk9roianwjgort8mqaos1m/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Đăng bài tin tức</h2>
+
+<form id="newsForm">
+  <input type="text" id="title" placeholder="Tiêu đề bài viết" required>
+
+  <select id="category" required>
+    <option value="">-- Chọn danh mục --</option>
+    <option value="Thời sự">Thời sự</option>
+    <option value="Kinh tế">Kinh tế</option>
+    <option value="Công nghệ">Công nghệ</option>
+    <option value="Giải trí">Giải trí</option>
+  </select>
+
+  <label>Ảnh đại diện (bắt buộc)</label>
+  <input type="file" id="thumbnail" accept="image/*" required>
+
+  <textarea id="content"></textarea>
+
+  <button type="submit">Đăng bài</button>
+</form>
+
+<script>
+let editor;
+
+// Khởi tạo TinyMCE
+tinymce.init({
+  selector: '#content',
+  height: 400,
+  plugins: 'image link lists table code',
+  toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | image link | code',
+
+  setup: function (ed) {
+    editor = ed;
+
+    ed.on('init', function () {
+      // Load bản nháp sau khi editor sẵn sàng
+      const draft = JSON.parse(localStorage.getItem("newsDraft"));
+      if (draft) {
+        document.getElementById("title").value = draft.title || "";
+        document.getElementById("category").value = draft.category || "";
+        editor.setContent(draft.content || "");
+      }
+    });
+  }
+});
+
+const form = document.getElementById("newsForm");
+
+// Tự động lưu bản nháp
+setInterval(() => {
+  if (!editor) return;
+
+  const draft = {
+    title: document.getElementById("title").value,
+    category: document.getElementById("category").value,
+    content: editor.getContent()
+  };
+
+  localStorage.setItem("newsDraft", JSON.stringify(draft));
+}, 3000);
+
+// Xử lý đăng bài
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const title = document.getElementById("title").value.trim();
+  const category = document.getElementById("category").value;
+  const file = document.getElementById("thumbnail").files[0];
+  const content = editor.getContent();
+
+  if (!title || !category || !file || !content) {
+    alert("Vui lòng nhập đầy đủ thông tin!");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function () {
+
+    const news = {
+      id: Date.now(),
+      title,
+      category,
+      thumbnail: reader.result,
+      content,
+      createdAt: new Date().toLocaleString()
+    };
+
+    let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
+    newsList.push(news);
+
+    localStorage.setItem("newsList", JSON.stringify(newsList));
+    localStorage.removeItem("newsDraft");
+
+    alert("Đăng bài thành công!");
+
+    window.location.href = "tintuc.html";
+  };
+
+  reader.readAsDataURL(file);
+});
+</script>
+</body>
+</html>

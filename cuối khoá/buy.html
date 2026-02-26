@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Mua bán | Bất động sản</title>
+
+<style>
+:root {
+  --primary: #0f2a44;
+  --accent: #2563eb;
+  --bg: #f4f6fa;
+  --text: #374151;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
+
+.nav-menu a {
+  font-size: 14px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-menu a:hover {
+  color: var(--accent);
+}
+
+.post-btn {
+  padding: 9px 16px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff !important;
+}
+
+/* ===== USER BOX ===== */
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.user-box:hover {
+  background: #f3f4f6;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #60a5fa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.user-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* ===== HERO ===== */
+.hero {
+  max-width: 1200px;
+  margin: 60px auto 30px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 34px;
+  color: var(--primary);
+}
+
+.hero p {
+  color: #6b7280;
+  margin: 14px 0 26px;
+}
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.search-box input,
+.search-box select {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.search-box input {
+  width: 220px;
+}
+
+.search-box button {
+  padding: 14px 22px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+}
+
+/* ===== DANH SÁCH MUA ===== */
+.buy-section {
+  max-width: 1200px;
+  margin: 40px auto 70px;
+  padding: 0 20px;
+}
+
+.buy-section h2 {
+  font-size: 22px;
+  color: var(--primary);
+  margin-bottom: 24px;
+}
+
+.buy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.buy-card {
+  display: flex;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,.06);
+  transition: .2s;
+}
+
+.buy-card:hover {
+  transform: translateY(-4px);
+}
+
+.buy-card img {
+  width: 260px;
+  height: 180px;
+  object-fit: cover;
+}
+
+.buy-info {
+  padding: 20px;
+  flex: 1;
+}
+
+.buy-info h3 {
+  margin: 0 0 10px;
+  color: var(--primary);
+}
+
+.buy-info p {
+  margin: 6px 0;
+  color: #6b7280;
+}
+
+.price {
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+  <!-- navbar -->
+   <div id="navbar-container"></div>
+
+<script>
+fetch("navbar.html")
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById("navbar-container").innerHTML = data;
+  });
+</script>
+<!-- navbar end -->
+<header class="navbar">
+  <div class="nav-container">
+    <a class="logo" href="home.html">RealEstate</a>
+
+    <div class="nav-right">
+      <nav class="nav-menu">
+        <a href="buy.html">Mua bán</a>
+        <a href="rent.html">Thuê</a>
+        <a href="#">Dự án</a>
+        <a href="#">Hướng dẫn đầu tư</a>
+        <a href="#">Thuê chuyên gia</a>
+        <a class="post-btn" href="post_sell.html">Đăng bài</a>
+      </nav>
+
+      <div class="user-box" id="userBox">
+        <div class="user-avatar" id="userAvatar"></div>
+        <div class="user-name" id="userName"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Mua bán bất động sản</h1>
+  <p>Đất nền • Nhà phố • Căn hộ • Biệt thự</p>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Tìm theo tên...">
+
+    <select id="provinceFilter">
+      <option value="">Tất cả tỉnh</option>
+      <option value="TP.HCM">TP.HCM</option>
+      <option value="Hà Nội">Hà Nội</option>
+      <option value="Đà Nẵng">Đà Nẵng</option>
+      <option value="Bình Dương">Bình Dương</option>
+    </select>
+
+    <select id="typeFilter">
+      <option value="">Loại hình</option>
+      <option value="Đất">Đất</option>
+      <option value="Nhà">Nhà</option>
+      <option value="Căn hộ">Căn hộ</option>
+    </select>
+
+    <button onclick="filterProperties()">Tìm kiếm</button>
+  </div>
+</section>
+
+<section class="buy-section">
+  <h2>Danh sách bất động sản đang bán</h2>
+  <div class="buy-list" id="buyList"></div>
+</section>
+
+<script>
+/* ================= LOGIN CHECK ================= */
+const isLoggedIn = localStorage.getItem("isLoggedIn");
+if (isLoggedIn !== "true") {
+  window.location.href = "login.html";
+}
+
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+if (currentUser) {
+  document.getElementById("userName").innerText = currentUser.username;
+
+  const avatarBox = document.getElementById("userAvatar");
+
+  if (currentUser.avatar && currentUser.avatar.trim() !== "") {
+    avatarBox.innerHTML = `<img src="${currentUser.avatar}" alt="avatar">`;
+  } else {
+    avatarBox.innerText = currentUser.username.charAt(0).toUpperCase();
+  }
+
+  document.getElementById("userBox").addEventListener("click", () => {
+    window.location.href = "profile.html";
+  });
+}
+
+/* ================= LẤY DỮ LIỆU ================= */
+let properties = JSON.parse(localStorage.getItem("sellPosts")) || [];
+
+/* ================= RENDER ================= */
+function renderProperties(list) {
+  const buyList = document.getElementById("buyList");
+  buyList.innerHTML = "";
+
+  if (list.length === 0) {
+    buyList.innerHTML = "<p>Chưa có bài đăng nào.</p>";
+    return;
+  }
+
+  list.forEach(item => {
+
+    const imageUrl = (item.images && item.images.length > 0)
+      ? item.images[0]
+      : "https://via.placeholder.com/260x180";
+
+    const card = document.createElement("div");
+    card.className = "buy-card";
+
+    card.innerHTML = `
+      <img src="${imageUrl}">
+      <div class="buy-info">
+        <h3>${item.title}</h3>
+        <p>Khu vực: ${item.province} ${item.district ? "- " + item.district : ""}</p>
+        <p>Loại: ${item.propertyType}</p>
+        <div class="price">${item.price || 'Liên hệ'}</div>
+      </div>
+    `;
+
+    // 👉 LƯU ID BÀI ĐANG CHỌN
+    card.addEventListener("click", () => {
+      localStorage.setItem("selectedPostId", item.id);
+      window.location.href = "detail.html";
+    });
+
+    buyList.appendChild(card);
+  });
+}
+/* ================= FILTER ================= */
+function filterProperties() {
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const province = document.getElementById("provinceFilter").value;
+  const type = document.getElementById("typeFilter").value;
+
+  const filtered = properties.filter(item =>
+    (item.title.toLowerCase().includes(search)) &&
+    (province === "" || item.province === province) &&
+    (type === "" || item.propertyType === type)
+  );
+
+  renderProperties(filtered);
+}
+
+/* ================= LOAD BAN ĐẦU ================= */
+renderProperties(properties);
+</script>
+
+</body>
+</html>

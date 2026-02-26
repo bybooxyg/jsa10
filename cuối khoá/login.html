@@ -201,6 +201,13 @@ button:hover {
 </html>
 <script>
 
+// =============================
+// Nếu chưa có trạng thái đăng nhập → mặc định false
+// =============================
+if (localStorage.getItem("isLoggedIn") === null) {
+  localStorage.setItem("isLoggedIn", "false");
+}
+
 const form = document.getElementById("form");
 const loginMessage = document.getElementById("loginMessage");
 
@@ -223,17 +230,18 @@ form.addEventListener("submit", function (e) {
 
   if (!user) {
     showLoginMessage("Email hoặc mật khẩu không đúng", "red");
+    localStorage.setItem("isLoggedIn", "false");
     return;
   }
 
-  localStorage.setItem(
-    "currentUser",
-    JSON.stringify({
-      id: user.id,
-      fullname: user.fullname,
-      email: user.email
-    })
-  );
+  // =============================
+  // ĐĂNG NHẬP THÀNH CÔNG
+  // =============================
+
+  // Lưu TOÀN BỘ thông tin user
+  localStorage.setItem("currentUser", JSON.stringify(user));
+
+  localStorage.setItem("isLoggedIn", "true");
 
   showLoginMessage("Đăng nhập thành công 🎉", "green");
 
@@ -246,4 +254,6 @@ function showLoginMessage(text, color) {
   loginMessage.innerText = text;
   loginMessage.style.color = color;
 }
+
 </script>
+

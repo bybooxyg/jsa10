@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thuê | Bất động sản</title>
+
+<style>
+:root {
+  --primary: #0f2a44;
+  --accent: #2563eb;
+  --bg: #f4f6fa;
+  --text: #374151;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
+
+.nav-menu a {
+  font-size: 14px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-menu a:hover {
+  color: var(--accent);
+}
+
+.post-btn {
+  padding: 9px 16px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff !important;
+}
+
+/* ===== USER BOX ===== */
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.user-box:hover {
+  background: #f3f4f6;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #60a5fa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.user-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* ===== HERO (giống home) ===== */
+.hero {
+  max-width: 1200px;
+  margin: 60px auto 30px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 34px;
+  color: var(--primary);
+}
+
+.hero p {
+  color: #6b7280;
+  margin: 14px 0 26px;
+}
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.search-box input {
+  width: 360px;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.search-box button {
+  padding: 14px 22px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+}
+
+/* ===== DANH SÁCH THUÊ ===== */
+.rent-section {
+  max-width: 1200px;
+  margin: 40px auto 70px;
+  padding: 0 20px;
+}
+
+.rent-section h2 {
+  font-size: 22px;
+  color: var(--primary);
+  margin-bottom: 24px;
+}
+
+.rent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rent-card {
+  display: flex;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,.06);
+  transition: .2s;
+  cursor: pointer;
+}
+
+.rent-card:hover {
+  transform: translateY(-4px);
+}
+
+.rent-card img {
+  width: 260px;
+  height: 180px;
+  object-fit: cover;
+}
+
+.rent-info {
+  padding: 20px;
+  flex: 1;
+}
+
+.rent-info h3 {
+  margin: 0 0 10px;
+  color: var(--primary);
+}
+
+.rent-info p {
+  margin: 6px 0;
+  color: #6b7280;
+}
+
+.price {
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+
+  .rent-card {
+    flex-direction: column;
+  }
+
+  .rent-card img {
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="nav-container">
+    <a class="logo" href="home.html">RealEstate</a>
+
+    <div class="nav-right">
+      <nav class="nav-menu">
+        <a href="buy.html">Mua bán</a>
+        <a href="rent.html">Thuê</a>
+        <a href="#">Dự án</a>
+        <a href="#">Hướng dẫn đầu tư</a>
+        <a href="#">Thuê chuyên gia</a>
+        <a class="post-btn" href="#">Đăng bài</a>
+      </nav>
+
+      <div class="user-box" id="userBox">
+        <div class="user-avatar" id="userAvatar"></div>
+        <div class="user-name" id="userName"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Cho thuê bất động sản</h1>
+  <p>Căn hộ • Nhà phố • Mặt bằng • Văn phòng</p>
+
+  <div class="search-box">
+    <input type="text" placeholder="Tìm kiếm khu vực, loại nhà...">
+    <button>Tìm kiếm</button>
+  </div>
+</section>
+
+<section class="rent-section">
+  <h2>Danh sách bất động sản cho thuê</h2>
+
+  <div class="rent-list">
+
+    <div class="rent-card">
+      <img src="https://images.unsplash.com/photo-1560185007-c5ca9d2c014d">
+      <div class="rent-info">
+        <h3>Căn hộ 2 phòng ngủ - Quận 7</h3>
+        <p>Diện tích: 75m²</p>
+        <p>Full nội thất cao cấp</p>
+        <div class="price">15 triệu / tháng</div>
+      </div>
+    </div>
+
+    <div class="rent-card">
+      <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be">
+      <div class="rent-info">
+        <h3>Nhà nguyên căn - Bình Thạnh</h3>
+        <p>Diện tích: 120m²</p>
+        <p>4 phòng ngủ, 3 WC</p>
+        <div class="price">22 triệu / tháng</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+if (isLoggedIn !== "true") {
+  window.location.href = "login.html";
+}
+
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+document.getElementById("userName").innerText = currentUser.username;
+
+const avatarBox = document.getElementById("userAvatar");
+
+if (currentUser.avatar && currentUser.avatar.trim() !== "") {
+  avatarBox.innerHTML = `<img src="${currentUser.avatar}" alt="avatar">`;
+} else {
+  avatarBox.innerText = currentUser.username.charAt(0).toUpperCase();
+}
+
+document.getElementById("userBox").addEventListener("click", () => {
+  window.location.href = "profile.html";
+});
+</script>
+
+</body>
+</html>

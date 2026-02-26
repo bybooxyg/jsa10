@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Đăng bán | RealEstate</title>
+
+<script src="https://cdn.tiny.cloud/1/mmoz8hxafxvd2ndd0r499a51ycfk9roianwjgort8mqaos1m/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+<style>
+:root {
+  --primary: #0f2a44;
+  --accent: #2563eb;
+  --bg: #f4f6fa;
+  --text: #374151;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body { margin: 0; background: var(--bg); }
+
+.navbar { background: #fff; border-bottom: 1px solid #e5e7eb; }
+
+.nav-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.nav-right { display: flex; align-items: center; gap: 22px; }
+
+.nav-menu { display: flex; gap: 22px; align-items: center; }
+
+.nav-menu a {
+  font-size: 14px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-menu a:hover { color: var(--accent); }
+
+.post-btn {
+  padding: 9px 16px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff !important;
+}
+
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.user-box:hover { background: #f3f4f6; }
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #60a5fa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+.user-avatar img { width:100%; height:100%; object-fit:cover; }
+
+.user-name { font-size: 14px; font-weight: 500; color: var(--text); }
+
+.form-container {
+  max-width: 900px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.06);
+}
+
+.form-container h2 { margin-bottom: 20px; color: var(--primary); }
+
+.form-group { margin-bottom: 20px; }
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+#preview img {
+  width:120px;
+  height:90px;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="nav-container">
+    <a class="logo" href="home.html">RealEstate</a>
+
+    <div class="nav-right">
+      <nav class="nav-menu">
+        <a href="buy.html">Mua bán</a>
+        <a href="rent.html">Thuê</a>
+        <a href="project.html">Dự án</a>
+        <a href="#">Hướng dẫn đầu tư</a>
+        <a href="#">Thuê chuyên gia</a>
+        <a class="post-btn" href="sell.html">Đăng bài</a>
+      </nav>
+
+      <div class="user-box" id="userBox">
+        <div class="user-avatar" id="userAvatar"></div>
+        <div class="user-name" id="userName"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="form-container">
+  <h2>Đăng bán bất động sản</h2>
+
+  <form id="sellForm">
+
+    <div class="form-group">
+      <label>Tiêu đề</label>
+      <input type="text" id="title" required>
+    </div>
+
+    <div class="form-group">
+      <label>Mô tả chi tiết</label>
+      <textarea id="description"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Loại bất động sản</label>
+      <select id="propertyType">
+        <option value="Nhà">Nhà</option>
+        <option value="Đất">Đất</option>
+        <option value="Căn hộ">Căn hộ</option>
+        <option value="Biệt thự">Biệt thự</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Tỉnh / Thành</label>
+      <select id="province" required>
+        <option value="TP.HCM">TP.HCM</option>
+        <option value="Hà Nội">Hà Nội</option>
+        <option value="Đà Nẵng">Đà Nẵng</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Quận / Huyện</label>
+      <select id="district" required>
+        <option value="">-- Chọn quận/huyện --</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Hình ảnh bất động sản (bắt buộc)</label>
+      <input type="file" id="images" accept="image/*" multiple required>
+      <div id="preview" style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;"></div>
+    </div>
+
+    <button type="submit" class="submit-btn">Gửi bài đăng</button>
+  </form>
+</div>
+
+<script>
+const isLoggedIn = localStorage.getItem("isLoggedIn");
+if (isLoggedIn !== "true") window.location.href = "login.html";
+
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+if (currentUser) {
+  document.getElementById("userName").innerText = currentUser.username;
+  const avatarBox = document.getElementById("userAvatar");
+
+  if (currentUser.avatar && currentUser.avatar.trim() !== "") {
+    avatarBox.innerHTML = `<img src="${currentUser.avatar}">`;
+  } else {
+    avatarBox.innerText = currentUser.username.charAt(0).toUpperCase();
+  }
+
+  document.getElementById("userBox").onclick = () => {
+    window.location.href = "profile.html";
+  };
+}
+
+tinymce.init({ selector: '#description', height: 300 });
+
+/* ===== District Data ===== */
+const districtsData = {
+  "TP.HCM": ["Quận 1","Quận 3","Quận 7","Bình Thạnh","Thủ Đức"],
+  "Hà Nội": ["Ba Đình","Hoàn Kiếm","Cầu Giấy","Thanh Xuân"],
+  "Đà Nẵng": ["Hải Châu","Sơn Trà","Ngũ Hành Sơn"]
+};
+
+const provinceSelect = document.getElementById("province");
+const districtSelect = document.getElementById("district");
+
+provinceSelect.addEventListener("change", function () {
+  districtSelect.innerHTML = '<option value="">-- Chọn quận/huyện --</option>';
+  districtsData[this.value].forEach(d => {
+    const option = document.createElement("option");
+    option.value = d;
+    option.textContent = d;
+    districtSelect.appendChild(option);
+  });
+});
+
+provinceSelect.dispatchEvent(new Event("change"));
+
+/* ===== Image Upload ===== */
+const imageInput = document.getElementById("images");
+const previewContainer = document.getElementById("preview");
+let imageBase64List = [];
+
+imageInput.addEventListener("change", function () {
+  previewContainer.innerHTML = "";
+  imageBase64List = [];
+
+  Array.from(this.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      imageBase64List.push(e.target.result);
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      previewContainer.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+});
+
+/* ===== SAVE POST ===== */
+document.getElementById("sellForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  if (imageBase64List.length === 0) {
+    alert("Vui lòng tải lên ít nhất 1 hình ảnh!");
+    return;
+  }
+
+  const newPost = {
+    id: Date.now(),
+    userId: currentUser.id,
+    username: currentUser.username,
+    title: document.getElementById("title").value.trim(),
+    description: tinymce.get("description").getContent(),
+    propertyType: document.getElementById("propertyType").value,
+    province: provinceSelect.value,
+    district: districtSelect.value,
+    images: imageBase64List,
+    createdAt: new Date().toISOString()
+  };
+
+  let posts = JSON.parse(localStorage.getItem("sellPosts")) || [];
+  posts.push(newPost);
+  localStorage.setItem("sellPosts", JSON.stringify(posts));
+
+  alert("Đăng bài thành công!");
+  this.reset();
+  tinymce.get("description").setContent("");
+  previewContainer.innerHTML = "";
+  imageBase64List = [];
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Đăng bán bất động sản</title>
+
+<style>
+:root {
+  --primary: #0f2a44;
+  --accent: #2563eb;
+  --bg: #f4f6fa;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+}
+
+.form-container {
+  max-width: 700px;
+  margin: 60px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.06);
+}
+
+h2 {
+  margin-top: 0;
+  color: var(--primary);
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #1d4ed8;
+}
+</style>
+</head>
+
+<body>
+    <!-- navbar -->
+<div id="navbar-container"></div>
+
+<script>
+fetch("navbar.html")
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById("navbar-container").innerHTML = data;
+  });
+</script>
+<div class="form-container">
+  <h2>Đăng bán bất động sản</h2>
+
+  <input type="text" id="title" placeholder="Tiêu đề" required>
+
+  <select id="province">
+    <option value="">Chọn tỉnh</option>
+    <option value="TP.HCM">TP.HCM</option>
+    <option value="Hà Nội">Hà Nội</option>
+    <option value="Đà Nẵng">Đà Nẵng</option>
+    <option value="Bình Dương">Bình Dương</option>
+  </select>
+
+  <input type="text" id="district" placeholder="Quận / Huyện">
+
+  <select id="propertyType">
+    <option value="">Loại hình</option>
+    <option value="Đất">Đất</option>
+    <option value="Nhà">Nhà</option>
+    <option value="Căn hộ">Căn hộ</option>
+  </select>
+
+  <input type="text" id="price" placeholder="Giá (VD: 3 tỷ)">
+
+  <textarea id="description" placeholder="Mô tả chi tiết"></textarea>
+
+  <input type="file" id="images" multiple accept="image/*">
+
+  <button class="submit-btn" onclick="submitPost()">Đăng bài</button>
+</div>
+
+<script>
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+function submitPost() {
+
+  const title = document.getElementById("title").value.trim();
+  const province = document.getElementById("province").value;
+  const district = document.getElementById("district").value.trim();
+  const propertyType = document.getElementById("propertyType").value;
+  const price = document.getElementById("price").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const imageFiles = document.getElementById("images").files;
+
+  if (!title || !province || !propertyType) {
+    alert("Vui lòng nhập đầy đủ thông tin bắt buộc.");
+    return;
+  }
+
+  const readerPromises = [];
+
+  for (let i = 0; i < imageFiles.length; i++) {
+    const reader = new FileReader();
+    const promise = new Promise(resolve => {
+      reader.onload = () => resolve(reader.result);
+    });
+    reader.readAsDataURL(imageFiles[i]);
+    readerPromises.push(promise);
+  }
+
+  Promise.all(readerPromises).then(imagesBase64 => {
+
+    const newPost = {
+      id: Date.now(),
+      title,
+      province,
+      district,
+      propertyType,
+      price,
+      description,
+      images: imagesBase64,
+      status: "available",      // 🔥 mặc định chưa bán
+      owner: currentUser.username,
+      createdAt: new Date().toISOString()
+    };
+
+    const posts = JSON.parse(localStorage.getItem("sellPosts")) || [];
+    posts.push(newPost);
+
+    localStorage.setItem("sellPosts", JSON.stringify(posts));
+
+    alert("Đăng bài thành công!");
+
+    window.location.href = "buy.html";
+  });
+}
+</script>
+
+</body>
+</html>
