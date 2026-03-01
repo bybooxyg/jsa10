@@ -66,6 +66,8 @@ textarea {
 <body>
     <!-- navbar -->
 <div id="navbar-container"></div>
+<script src="navbar.js"></script>
+
 
 <script>
 fetch("navbar.html")
@@ -73,6 +75,7 @@ fetch("navbar.html")
   .then(data => {
     document.getElementById("navbar-container").innerHTML = data;
   });
+  initUser()
 </script>
 <div class="form-container">
   <h2>Đăng bán bất động sản</h2>

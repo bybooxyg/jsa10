@@ -224,36 +224,19 @@ body {
 <body>
   <!-- navbar -->
    <div id="navbar-container"></div>
+<script src="navbar.js"></script>
 
 <script>
 fetch("navbar.html")
   .then(res => res.text())
   .then(data => {
     document.getElementById("navbar-container").innerHTML = data;
+    if (typeof initUser === "function") {
+      initUser();
+    }
   });
 </script>
 <!-- navbar end -->
-<header class="navbar">
-  <div class="nav-container">
-    <a class="logo" href="home.html">RealEstate</a>
-
-    <div class="nav-right">
-      <nav class="nav-menu">
-        <a href="buy.html">Mua bán</a>
-        <a href="rent.html">Thuê</a>
-        <a href="#">Dự án</a>
-        <a href="#">Hướng dẫn đầu tư</a>
-        <a href="#">Thuê chuyên gia</a>
-        <a class="post-btn" href="post_sell.html">Đăng bài</a>
-      </nav>
-
-      <div class="user-box" id="userBox">
-        <div class="user-avatar" id="userAvatar"></div>
-        <div class="user-name" id="userName"></div>
-      </div>
-    </div>
-  </div>
-</header>
 
 <section class="hero">
   <h1>Mua bán bất động sản</h1>
@@ -291,24 +274,6 @@ fetch("navbar.html")
 const isLoggedIn = localStorage.getItem("isLoggedIn");
 if (isLoggedIn !== "true") {
   window.location.href = "login.html";
-}
-
-const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
-if (currentUser) {
-  document.getElementById("userName").innerText = currentUser.username;
-
-  const avatarBox = document.getElementById("userAvatar");
-
-  if (currentUser.avatar && currentUser.avatar.trim() !== "") {
-    avatarBox.innerHTML = `<img src="${currentUser.avatar}" alt="avatar">`;
-  } else {
-    avatarBox.innerText = currentUser.username.charAt(0).toUpperCase();
-  }
-
-  document.getElementById("userBox").addEventListener("click", () => {
-    window.location.href = "profile.html";
-  });
 }
 
 /* ================= LẤY DỮ LIỆU ================= */

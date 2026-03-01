@@ -208,7 +208,7 @@ body {
 
 <!-- ===== NAVBAR LOAD TỪ FILE RIÊNG ===== -->
 <div id="navbar-container"></div>
-
+<script src="navbar.js"></script>
 <script>
 fetch("navbar.html")
   .then(res => res.text())
@@ -216,33 +216,6 @@ fetch("navbar.html")
     document.getElementById("navbar-container").innerHTML = data;
     initUser(); // chạy sau khi navbar load xong
   });
-
-function initUser() {
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
-  if (!currentUser) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  const userName = document.getElementById("userName");
-  const avatarBox = document.getElementById("userAvatar");
-  const userBox = document.getElementById("userBox");
-
-  if (!userName || !avatarBox || !userBox) return;
-
-  userName.innerText = currentUser.username;
-
-  if (currentUser.avatar && currentUser.avatar.trim() !== "") {
-    avatarBox.innerHTML = `<img src="${currentUser.avatar}">`;
-  } else {
-    avatarBox.innerText = currentUser.username.charAt(0).toUpperCase();
-  }
-
-  userBox.addEventListener("click", () => {
-    window.location.href = "profile.html";
-  });
-}
 </script>
 
 <section class="hero">
