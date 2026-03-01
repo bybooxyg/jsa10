@@ -259,13 +259,15 @@ button:hover {
       return;
     }else{
       mail.style.display = "none"
-    }
-    const user ={
-      username : username,
-      email : email,
-      password : password
-
-    }
+    }const User = {
+  id: Date.now(),
+  fullname,
+  email,
+  password,
+  verified: false,        // mặc định chưa xác thực
+  verifyStatus: "none",   // none | pending | approved | rejected
+  cccdImage: null
+};
       // Lưu vào localStorage
   checkusers.push(user)
   localStorage.setItem("users", JSON.stringify(checkusers))

@@ -225,18 +225,8 @@ body {
   <!-- navbar -->
    <div id="navbar-container"></div>
 <script src="navbar.js"></script>
+<script>loadNavbar();</script>
 
-<script>
-fetch("navbar.html")
-  .then(res => res.text())
-  .then(data => {
-    document.getElementById("navbar-container").innerHTML = data;
-    if (typeof initUser === "function") {
-      initUser();
-    }
-  });
-</script>
-<!-- navbar end -->
 
 <section class="hero">
   <h1>Mua bán bất động sản</h1>
@@ -270,11 +260,6 @@ fetch("navbar.html")
 </section>
 
 <script>
-/* ================= LOGIN CHECK ================= */
-const isLoggedIn = localStorage.getItem("isLoggedIn");
-if (isLoggedIn !== "true") {
-  window.location.href = "login.html";
-}
 
 /* ================= LẤY DỮ LIỆU ================= */
 let properties = JSON.parse(localStorage.getItem("sellPosts")) || [];
@@ -334,6 +319,7 @@ function filterProperties() {
 
 /* ================= LOAD BAN ĐẦU ================= */
 renderProperties(properties);
+
 </script>
 
 </body>

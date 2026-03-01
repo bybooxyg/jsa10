@@ -209,13 +209,9 @@ body {
 <!-- ===== NAVBAR LOAD TỪ FILE RIÊNG ===== -->
 <div id="navbar-container"></div>
 <script src="navbar.js"></script>
+
 <script>
-fetch("navbar.html")
-  .then(res => res.text())
-  .then(data => {
-    document.getElementById("navbar-container").innerHTML = data;
-    initUser(); // chạy sau khi navbar load xong
-  });
+  loadNavbar();
 </script>
 
 <section class="hero">
@@ -240,8 +236,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let newsList = JSON.parse(localStorage.getItem("newsList")) || [];
 
+  // 🔥 CHỈ LẤY BÀI ĐÃ DUYỆT
+  newsList = newsList.filter(news => news.status === "approved");
+
   if (newsList.length === 0) {
-    newsGrid.innerHTML = "<p>Chưa có bài viết nào.</p>";
+    newsGrid.innerHTML = "<p>Chưa có bài viết nào đã được duyệt.</p>";
     return;
   }
 

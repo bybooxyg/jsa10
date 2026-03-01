@@ -11,7 +11,15 @@ body {
   margin: 0;
   padding: 40px;
 }
-
+#progressBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: #ff2e63;
+  width: 0%;
+  z-index: 999;
+}
 .news-detail {
   max-width: 800px;
   margin: auto;
@@ -42,30 +50,21 @@ body {
 }
 </style>
 </head>
-
+<div id="progressBar"></div>
 <body>
 
-<div id="navbar"></div>
+<div id="navbar-container"></div>
+<script src="navbar.js"></script>
+<script>loadNavbar();</script>
 
 <div class="news-detail">
   <h1 id="newsTitle"></h1>
   <img id="newsImage" style="display:none;">
   <div id="newsContent"></div>
 </div>
-<script src="navbar.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-
-  // Load navbar
-  fetch("navbar.html")
-    .then(res => res.text())
-    .then(data => {
-      document.getElementById("navbar").innerHTML = data;
-
-      initUser();
-    });
-
   const params = new URLSearchParams(window.location.search);
   const id = Number(params.get("id"));
 
@@ -75,6 +74,12 @@ document.addEventListener("DOMContentLoaded", function () {
   if (!news) {
     document.querySelector(".news-detail").innerHTML =
       "<h2>Không tìm thấy bài viết</h2>";
+    return;
+  }
+
+  if (news.status !== "approved") {
+    document.querySelector(".news-detail").innerHTML =
+      "<h2>Bài viết chưa được duyệt hoặc không tồn tại.</h2>";
     return;
   }
 
@@ -93,6 +98,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+window.onscroll = () => {
+  const scroll = document.documentElement.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const percent = (scroll / height) * 100;
+  document.getElementById("progressBar").style.width = percent + "%";
+};
 </script>
 
 </body>

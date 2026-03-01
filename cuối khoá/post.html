@@ -104,7 +104,7 @@ form.addEventListener("submit", function (e) {
   const category = document.getElementById("category").value;
   const file = document.getElementById("thumbnail").files[0];
   const content = editor.getContent();
-
+  const status = "pending"
   if (!title || !category || !file || !content) {
     alert("Vui lòng nhập đầy đủ thông tin!");
     return;
@@ -119,6 +119,7 @@ form.addEventListener("submit", function (e) {
       category,
       thumbnail: reader.result,
       content,
+      status,
       createdAt: new Date().toLocaleString()
     };
 

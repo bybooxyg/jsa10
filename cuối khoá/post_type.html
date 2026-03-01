@@ -63,14 +63,17 @@ h1 {
 <body>
   <!-- navbar -->
    <div id="navbar-container"></div>
-<script src="navbar.js"></script>
 
 <script>
 fetch("navbar.html")
   .then(res => res.text())
   .then(data => {
     document.getElementById("navbar").innerHTML = data;
-  initUser()    
+
+    // Sau khi navbar load xong mới chạy JS
+    const script = document.createElement("script");
+    script.src = "navbar.js";
+    document.body.appendChild(script);
   });
 </script>
 <!-- navbar end -->
