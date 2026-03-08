@@ -198,14 +198,15 @@ if (isLoggedIn !== "true") {
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 if (currentUser) {
-  document.getElementById("userName").innerText = currentUser.username;
+  const displayName = currentUser.fullname || currentUser.username || "User";
+  document.getElementById("userName").innerText = displayName;
 
   const avatarBox = document.getElementById("userAvatar");
 
   if (currentUser.avatar && currentUser.avatar.trim() !== "") {
     avatarBox.innerHTML = `<img src="${currentUser.avatar}">`;
   } else {
-    avatarBox.innerText = currentUser.username.charAt(0).toUpperCase();
+    avatarBox.innerText = displayName.charAt(0).toUpperCase();
   }
 
   document.getElementById("userBox").onclick = () => {

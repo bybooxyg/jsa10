@@ -255,7 +255,7 @@ document.getElementById("sellForm").addEventListener("submit", function(e) {
   const newPost = {
     id: Date.now(),
     userId: currentUser.id,
-    username: currentUser.username,
+    username: currentUser.fullname || currentUser.username,
     title: document.getElementById("title").value.trim(),
     description: tinymce.get("description").getContent(),
     propertyType: document.getElementById("propertyType").value,

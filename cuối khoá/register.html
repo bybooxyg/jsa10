@@ -203,78 +203,84 @@ button:hover {
 </html>
 
 <script>
+const registerform = document.querySelector(".form")
 
-  const registerform = document.querySelector(".form")
-  registerform.addEventListener("submit",function (e) {
-    e.preventDefault();
+registerform.addEventListener("submit", function (e) {
+  e.preventDefault();
 
-    const username = document.getElementById("username").value.trim()
-    const email = document.getElementById("email").value.trim()
-    const password = document.getElementById("password").value;
-    const password_again = document.getElementById("password2").value;
-    const name = document.getElementById("1")
-    const mail = document.getElementById("2")
-    const pass = document.getElementById("3")
-    const verifypass= document.getElementById("4")
+  const username = document.getElementById("username").value.trim()
+  const email = document.getElementById("email").value.trim()
+  const password = document.getElementById("password").value
+  const password_again = document.getElementById("password2").value
 
-    if (!username)  {
-      name.style.display = "flex"
-      name.style.color = "red"
-      return
-    }else {
-      name.style.display = "none"
-    }
-    if (!email)  {
-      mail.innerText = "vui lòng nhập đầu đủ email"
-      mail.style.display = "flex"
-      mail.style.color = "red"
-      return
-    }else {
-      mail.style.display = "none"
-    }
-    if ((password.length <6) || (password.length>30))  {
-      pass.style.display = "flex"
-      pass.style.color = "red"
-      return
-    }else {
-      pass.style.display = "none"
-      
-    }
-    if (password !== password_again) {
-      verifypass.style.display = "flex"
-      verifypass.style.color = "red"
-      return;
-    }else {
-      verifypass.style.display = "none"
-    }
-    // Lấy danh sách user đã đăng ký
-    const checkusers = JSON.parse(localStorage.getItem("users")) || [];
+  const name = document.getElementById("1")
+  const mail = document.getElementById("2")
+  const pass = document.getElementById("3")
+  const verifypass = document.getElementById("4")
 
-    // Kiểm tra email tồn tại
-    const exists = checkusers.some((u) => u.email === email);
-    if (exists) {
-      mail.innerText = "email đã tồn tại, xin vui lòng thay đổi email"
-      mail.style.color = "red"
-      mail.style.display = "flex"
-      return;
-    }else{
-      mail.style.display = "none"
-    }const User = {
-  id: Date.now(),
-  fullname,
-  email,
-  password,
-  verified: false,        // mặc định chưa xác thực
-  verifyStatus: "none",   // none | pending | approved | rejected
-  cccdImage: null
-};
-      // Lưu vào localStorage
-  checkusers.push(user)
+  if (!username) {
+    name.style.display = "block"
+    name.style.color = "red"
+    return
+  } else {
+    name.style.display = "none"
+  }
+
+  if (!email) {
+    mail.innerText = "vui lòng nhập đầy đủ email"
+    mail.style.display = "block"
+    mail.style.color = "red"
+    return
+  } else {
+    mail.style.display = "none"
+  }
+
+  if ((password.length < 6) || (password.length > 30)) {
+    pass.style.display = "block"
+    pass.style.color = "red"
+    return
+  } else {
+    pass.style.display = "none"
+  }
+
+  if (password !== password_again) {
+    verifypass.style.display = "block"
+    verifypass.style.color = "red"
+    return
+  } else {
+    verifypass.style.display = "none"
+  }
+
+  // Lấy danh sách user đã đăng ký
+  const checkusers = JSON.parse(localStorage.getItem("users")) || []
+
+  // Kiểm tra email tồn tại
+  const exists = checkusers.some((u) => u.email === email)
+
+  if (exists) {
+    mail.innerText = "email đã tồn tại, xin vui lòng thay đổi email"
+    mail.style.display = "block"
+    mail.style.color = "red"
+    return
+  } else {
+    mail.style.display = "none"
+  }
+
+  const User = {
+    id: Date.now(),
+    fullname: username,
+    email: email,
+    password: password,
+    verified: false,
+    verifyStatus: "none",
+    cccdImage: null
+  }
+
+  // Lưu vào localStorage
+  checkusers.push(User)
   localStorage.setItem("users", JSON.stringify(checkusers))
 
   alert("Đăng ký thành công 🎉")
   location.replace("login.html")
-   }
-    
-   )
+})
 </script>

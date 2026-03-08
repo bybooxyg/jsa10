@@ -25,16 +25,23 @@ function initUser(shouldRedirect = false) {
   const userBox = document.getElementById("userBox");
   if (!userName || !avatarBox || !userBox) return;
 
-  userName.innerText = currentUser.username;
+  // Dùng fullname thay vì username (vì register.html lưu fullname)
+  const displayName = currentUser.fullname || currentUser.username || "User";
+  userName.innerText = displayName;
+  
   if (currentUser.avatar && currentUser.avatar.trim() !== "") {
     avatarBox.innerHTML = `<img src="${currentUser.avatar}" alt="avatar">`;
   } else {
-    avatarBox.textContent = currentUser.username.charAt(0).toUpperCase();
+    avatarBox.textContent = displayName.charAt(0).toUpperCase();
   }
 
-  userBox.addEventListener("click", () => {
-    window.location.href = "profile.html";
-  });
+  // Gắn event listener sau khi HTML được load
+  if (userBox && !userBox.hasAttribute("data-listener-attached")) {
+    userBox.addEventListener("click", () => {
+      window.location.href = "profile.html";
+    });
+    userBox.setAttribute("data-listener-attached", "true");
+  }
 }
 
 // make available globally so pages can call it after loading navbar

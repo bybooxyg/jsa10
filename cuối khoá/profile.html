@@ -108,7 +108,15 @@ body{margin:0;background:var(--bg);}
 
     <div class="verify-box" id="verifySection">
       <h3>Xác thực tài khoản</h3>
-      <input type="file" id="cccdUpload" accept="image/*">
+
+      <label>Ảnh CCCD mặt trước</label>
+      <input type="file" id="cccdFront" accept="image/*">
+
+      <br><br>
+
+      <label>Ảnh CCCD mặt sau</label>
+      <input type="file" id="cccdBack" accept="image/*">
+
       <button class="save-btn" type="button" onclick="submitVerify()">Gửi xác thực</button>
     </div>
 
@@ -118,35 +126,41 @@ body{margin:0;background:var(--bg);}
 </section>
 
 <script>
+
 if(localStorage.getItem("isLoggedIn")!=="true"){
   window.location.href="login.html";
 }
 
 let currentUser=JSON.parse(localStorage.getItem("currentUser"));
+
 if(!currentUser.verifyStatus){
   currentUser.verifyStatus="none";
 }
 
 function renderProfile(){
-  document.getElementById("profileName").innerText=currentUser.username;
+  document.getElementById("profileName").innerText=currentUser.fullname || currentUser.username || "User";
   document.getElementById("profileEmail").innerText=currentUser.email;
-  document.getElementById("username").value=currentUser.username||"";
+  document.getElementById("username").value=currentUser.fullname || currentUser.username || "";
   document.getElementById("phone").value=currentUser.phone||"";
   document.getElementById("address").value=currentUser.address||"";
   document.getElementById("avatar").value=currentUser.avatar||"";
 
   const avatar=document.getElementById("profileAvatar");
+  const displayName = currentUser.fullname || currentUser.username || "User";
+
   if(currentUser.avatar){
-    avatar.innerHTML=`<img src="${currentUser.avatar}" onerror="this.onerror=null;this.parentElement.innerText='${currentUser.username.charAt(0).toUpperCase()}'">`;
+    avatar.innerHTML=`<img src="${currentUser.avatar}" onerror="this.onerror=null;this.parentElement.innerText='${displayName.charAt(0).toUpperCase()}'">`;
   }else{
-    avatar.innerText=currentUser.username.charAt(0).toUpperCase();
+    avatar.innerText=displayName.charAt(0).toUpperCase();
   }
 
   renderVerifyStatus();
 }
+
 renderProfile();
 
 function renderVerifyStatus(){
+
   const badge=document.getElementById("verifyBadge");
   badge.className="badge";
 
@@ -155,94 +169,145 @@ function renderVerifyStatus(){
     badge.innerText="Đã xác thực";
     document.getElementById("verifySection").style.display="none";
   }
+
   else if(currentUser.verifyStatus==="pending"){
     badge.classList.add("pending");
     badge.innerText="Đang chờ duyệt";
   }
+
   else if(currentUser.verifyStatus==="rejected"){
     badge.classList.add("rejected");
     badge.innerText="Bị từ chối";
   }
+
   else{
     badge.classList.add("none");
     badge.innerText="Chưa xác thực";
   }
+
 }
 
 function saveProfile(){
-  currentUser.username=document.getElementById("username").value.trim();
+
+  currentUser.fullname=document.getElementById("username").value.trim();
   currentUser.phone=document.getElementById("phone").value.trim();
   currentUser.address=document.getElementById("address").value.trim();
   currentUser.avatar=document.getElementById("avatar").value.trim();
 
   let users=JSON.parse(localStorage.getItem("users"))||[];
+
   users=users.map(u=>u.email===currentUser.email?currentUser:u);
 
   localStorage.setItem("users",JSON.stringify(users));
   localStorage.setItem("currentUser",JSON.stringify(currentUser));
 
   alert("Cập nhật thành công");
+
   renderProfile();
+
 }
-const OCR_API_KEY = "K81111093788957";
+
 async function submitVerify(){
 
-  const file = document.getElementById("cccdUpload").files[0];
+  const FPT_API_KEY="ybZS5F1BQ7YCwHrm8NUSNOTIkWpS9ke4";
 
-  if(!file){
-    alert("Vui lòng chọn ảnh");
+  const front=document.getElementById("cccdFront").files[0];
+  const back=document.getElementById("cccdBack").files[0];
+
+  if(!front||!back){
+    alert("Vui lòng upload đủ 2 mặt CCCD");
     return;
   }
 
-  if(!file.type.includes("jpeg") && !file.type.includes("png")){
-    alert("Chỉ chấp nhận ảnh JPG hoặc PNG");
-    return;
-  }
-
-  const resizedFile = await resizeImage(file);
-
-  const formData = new FormData();
-  formData.append("apikey", OCR_API_KEY);
-  formData.append("language", "eng");
-  formData.append("file", resizedFile);
+  const formData=new FormData();
+  formData.append("image",front);
 
   try{
-    const response = await fetch("https://api.ocr.space/parse/image",{
-      method:"POST",
-      body: formData
-    });
+    
+const response=await fetch("https://api.fpt.ai/vision/idr/vnm/",{
+  method:"POST",
+  headers:{
+    "api_key": "ybZS5F1BQ7YCwHrm8NUSNOTIkWpS9ke4"
+  },
+  body:formData
+});
 
-    const result = await response.json();
-    console.log(result);
+const result=await response.json();
 
-    if(result.IsErroredOnProcessing || !result.ParsedResults){
-      alert("Không đọc được ảnh. Hãy chụp rõ hơn.");
-      return;
-    }
+console.log("FPT RESULT:",result);
 
-    const text = result.ParsedResults[0].ParsedText.toUpperCase();
-
-    if(!text){
-      alert("OCR không nhận diện được chữ.");
-      return;
-    }
-
-    // Kiểm tra CCCD
-    const hasQuocHieu = text.includes("CỘNG HÒA");
-    const hasNumber = /\d{12}/.test(text);
-
-    if(!hasQuocHieu || !hasNumber){
-      alert("Không phải CCCD hợp lệ.");
-      return;
-    }
-
-    currentUser.verifyStatus = "pending";
-    alert("Đã gửi chờ duyệt!");
-
-  }catch(err){
-    alert("Lỗi kết nối OCR");
-  }
+if(result.errorCode!==0){
+  alert("Không đọc được CCCD");
+  return;
 }
+
+if(!result.data || result.data.length===0){
+  alert("Không đọc được thông tin CCCD");
+  return;
+}
+
+const info=result.data[0];
+
+    if(Number(info.id_prob)<0.8){
+      alert("Ảnh CCCD không rõ");
+      return;
+    }
+
+    const frontBase64=await fileToBase64(front);
+    const backBase64=await fileToBase64(back);
+
+    currentUser.verifyStatus="pending";
+
+    currentUser.cccd={
+      id:info.id,
+      name:info.name,
+      dob:info.dob,
+      address:info.address,
+      frontImage:frontBase64,
+      backImage:backBase64
+    };
+
+    let users=JSON.parse(localStorage.getItem("users"))||[];
+
+    users=users.map(u=>u.email===currentUser.email?currentUser:u);
+
+    localStorage.setItem("users",JSON.stringify(users));
+    localStorage.setItem("currentUser",JSON.stringify(currentUser));
+
+    alert("Xác thực thành công! Chờ admin duyệt");
+
+    renderVerifyStatus();
+
+  }
+
+  catch(err){
+
+    console.error(err);
+
+    alert("Lỗi kết nối FPT AI");
+
+  }
+
+}
+
+function fileToBase64(file){
+
+  return new Promise((resolve,reject)=>{
+
+    const reader=new FileReader();
+
+    reader.onload=()=>resolve(reader.result);
+
+    reader.onerror=error=>reject(error);
+
+    reader.readAsDataURL(file);
+
+  });
+console.log("FILE:", front);
+console.log("SIZE:", front ? front.size : "no file");
+}
+console.log("FPT RESULT:",result);
+
 </script>
 
 </body>

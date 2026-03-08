@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Đăng bán bất động sản</title>
+<title>Đăng cho thuê bất động sản</title>
 
 <style>
 :root {
@@ -64,7 +64,7 @@ textarea {
 </head>
 
 <body>
-    <!-- navbar -->
+
 <div id="navbar-container"></div>
 
 <script>
@@ -74,8 +74,9 @@ fetch("navbar.html")
     document.getElementById("navbar-container").innerHTML = data;
   });
 </script>
+
 <div class="form-container">
-  <h2>Đăng bán bất động sản</h2>
+  <h2>Đăng cho thuê bất động sản</h2>
 
   <input type="text" id="title" placeholder="Tiêu đề" required>
 
@@ -94,9 +95,10 @@ fetch("navbar.html")
     <option value="Đất">Đất</option>
     <option value="Nhà">Nhà</option>
     <option value="Căn hộ">Căn hộ</option>
+    <option value="Phòng trọ">Phòng trọ</option>
   </select>
 
-  <input type="text" id="price" placeholder="Giá (VD: 3 tỷ)">
+  <input type="text" id="price" placeholder="Giá thuê (VD: 5 triệu / tháng)">
 
   <textarea id="description" placeholder="Mô tả chi tiết"></textarea>
 
@@ -106,6 +108,7 @@ fetch("navbar.html")
 </div>
 
 <script>
+
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 function submitPost() {
@@ -127,9 +130,11 @@ function submitPost() {
 
   for (let i = 0; i < imageFiles.length; i++) {
     const reader = new FileReader();
+
     const promise = new Promise(resolve => {
       reader.onload = () => resolve(reader.result);
     });
+
     reader.readAsDataURL(imageFiles[i]);
     readerPromises.push(promise);
   }
@@ -138,6 +143,7 @@ function submitPost() {
 
     const newPost = {
       id: Date.now(),
+      type: "rent",  // 🔥 bài cho thuê
       title,
       province,
       district,
@@ -145,21 +151,23 @@ function submitPost() {
       price,
       description,
       images: imagesBase64,
-      status: "available",      // 🔥 mặc định chưa bán
-      owner: currentUser.username,
+      status: "available",
+      owner: currentUser?.fullname || currentUser?.username,
       createdAt: new Date().toISOString()
     };
 
-    const posts = JSON.parse(localStorage.getItem("sellPosts")) || [];
+    const posts = JSON.parse(localStorage.getItem("rentPosts")) || [];
+
     posts.push(newPost);
 
-    localStorage.setItem("sellPosts", JSON.stringify(posts));
+    localStorage.setItem("rentPosts", JSON.stringify(posts));
 
-    alert("Đăng bài thành công!");
+    alert("Đăng bài cho thuê thành công!");
 
-    window.location.href = "buy.html";
+    window.location.href = "rent.html";
   });
 }
+
 </script>
 
 </body>
